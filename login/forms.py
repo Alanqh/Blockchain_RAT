@@ -1,6 +1,8 @@
 from captcha.fields import CaptchaField
 from django import forms
 
+from login.models import SiteUser
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='用户名', required=True,
@@ -15,5 +17,6 @@ class RegisterForm(forms.Form):
     password1 = forms.CharField(label="密码", max_length=256, required=True)
     password2 = forms.CharField(label="确认密码", max_length=256, required=True)
     email = forms.EmailField(label="邮箱地址")
+    usertype = forms.ChoiceField(choices=SiteUser.Usertype, label="用户类型")
     captcha = CaptchaField(label='验证码')
 

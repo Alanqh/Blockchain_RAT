@@ -1,0 +1,39 @@
+<!-- navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="/"> 首页 </a>
+            <li class="nav-item ">
+                <a class="nav-link" href="/create/"> 发布管理 </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"> 交易管理 </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="#"> 个人记录 </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" >统计面板</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <ul class="navbar-nav">
+        {% if request.session.username %}
+            <li class="nav-item">
+                <a class="nav-link" href="/login/logout/">登出</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">{{ request.session.username }}</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/login/">登录</a>
+            </li>
+        {% endif %}
+        </ul>
+    </div>
+</nav>

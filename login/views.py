@@ -25,7 +25,7 @@ def login(request):
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
                 request.session['username'] = user.name
-                return redirect('/index/')
+                return redirect('index')
             else:
                 message = "用户名或者密码错误"
                 return render(request, 'login/login.html', locals())
@@ -55,6 +55,7 @@ def register(request):
             password1 = register_form.cleaned_data.get('password1')
             password2 = register_form.cleaned_data.get('password2')
             email = register_form.cleaned_data.get('email')
+            usertype = register_form.cleaned_data.get('usertype')
 
             # 接下来判断用户名和邮箱是否已经被注册
             same_name_user = SiteUser.objects.filter(name=username)
@@ -69,13 +70,16 @@ def register(request):
             new_user = None
             try:
                 # 将注册的信息存储到数据库，跳转到登录界面
-                new_user = SiteUser(name=username, password=hash_code(password1), email=email)
+                new_user = SiteUser(name=username, password=hash_code(password1), email=email, usertype=usertype)
                 new_user.save()
                 # 生成确认码并发送确认邮件
                 code = make_confirm_string(new_user)
                 print('code:', code)
-                send_email(email)
+                send_email(email, code)
                 message = '请前往邮箱进行确认！'
+                # 默认用户会在邮箱中完成验证，将用户的状态设置为已激活。
+                new_user.has_confirmed = True
+                new_user.save()
             except Exception as e:
                 new_user.delete()
                 message = '发送邮件失败！'

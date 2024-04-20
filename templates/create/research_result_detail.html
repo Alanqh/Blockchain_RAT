@@ -1,0 +1,40 @@
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>科研成果详情</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+    <h1>{{ research_result.Title }}</h1>
+    <p>成果ID：{{ research_result.AchievementID }}</p>
+    <p>用户ID：{{ research_result.UserID }}</p>
+    <p>作者：{{ research_result.Author }}</p>
+    <p>所有权归属：{{ research_result.Ownership }}</p>
+    <p>摘要：{{ research_result.Abstract }}</p>
+    <p>关键词：{{ research_result.Keywords }}</p>
+    <p>成果类型：{{ research_result.get_AchievementType_display }}</p>
+    <p>上传时间：{{ research_result.UploadTime }}</p>
+    <p>被查看次数：{{ research_result.ReadingCount }}</p>
+    <p>被引用次数：{{ research_result.CitingCount }}</p>
+    <!-- 科研成果附件文件夹 -->
+    <h2>附件：</h2>
+    {% for file in research_result.files.all %}
+        <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.file.name }}</a></p>
+    {% endfor %}
+    <!-- 返回修改 -->
+    <a href="#">返回修改</a>
+    
+    <!-- 如果状态是未审核或者已修改，则显示提交审核 -->   
+    {% if research_result.Status == '未审核' or research_result.Status == '已修改' %}
+        <a href="{% url '#' %}">提交审核</a>
+    {% endif %}
+</body>
+</html>

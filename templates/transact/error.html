@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>错误</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<br>
+<div class="container">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">错误</h4>
+        <p>{{ message }}</p>
+        <hr>
+        <p class="mb-0">请尊重科研工作者的知识产权！！！</p>
+    </div>
+</div>
+</body>
+</html>
