@@ -12,7 +12,7 @@ def download_file(request, file_id):
         return HttpResponseForbidden('You are not logged in.')
     print(file.research_result.Ownership)
     print(user.name)
-    if file.research_result.Ownership != user.name:
+    if (user.name != file.research_result.Ownership or file.research_result.Author) and user.usertype != '2':
         return render(request, 'transact/error.html', {'message': '你没有权限下载这个文件。请购买后再试。'})
     response = FileResponse(file.file)
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(file.file.name)

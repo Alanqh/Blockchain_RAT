@@ -7,6 +7,7 @@ urlpatterns = [
     path('create/', include('create.urls')),  # 包含create应用的URL配置
     path('login/', include('login.urls')),
     path('transact/', include('transact.urls')),
+    path('review/', include('review.urls')),  # 包含review应用的URL配置
 
     # 包含login应用的URL配置
 ]

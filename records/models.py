@@ -20,16 +20,16 @@ class ModificationRecords(models.Model):
 
 
 class ReviewRecords(models.Model):
-    REVIEW_RESULT_CHOICES = [
+    Review_Results= [
         ('1', '通过'),
-        ('2', '驳回'),
-        # 可以根据需要添加更多状态
-    ]
+        ('2', '未通过'),
+        ('3', '未处理'),
+        ]
     ReviewRecordID = models.AutoField(primary_key=True, verbose_name="审核记录ID")
     AchievementID = models.ForeignKey(ResearchResult, on_delete=models.CASCADE, verbose_name="科研成果ID")
     ReviewerID = models.ForeignKey(SiteUser, on_delete=models.CASCADE, verbose_name="审核人员ID")
     ReviewTime = models.DateTimeField(auto_now_add=True, verbose_name="审核时间")
-    ReviewResult = models.CharField(max_length=200, choices=REVIEW_RESULT_CHOICES, default='1', verbose_name="审核结果")
+    ReviewResult = models.CharField(max_length=200, choices= Review_Results, default='3',verbose_name="审核结果")
     ReviewComments = models.TextField(verbose_name="审核意见")
 
     class Meta:

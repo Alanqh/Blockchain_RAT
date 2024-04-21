@@ -31,9 +31,5 @@
         <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.filename }}</a></p>
     {% endfor %}
 
-    <!-- 如果状态是未审核或者已修改，则显示提交审核 -->
-    {% if research_result.ResaerchStatus == '1' or '2'%}
-        <a href="#">提交审核</a>
-    {% endif %}
 </body>
 </html>
