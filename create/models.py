@@ -13,6 +13,15 @@ class ResearchResult(models.Model):
         ('4', '技术报告'),
         # 可以根据需要添加更多类型
     ]
+    STATUS_CHOICES = [
+        ('1', '未审核'),
+        ('2', '已修改'),
+        ('3', '审核中'),
+        ('4', '待交易'),
+        ('5', '交易中'),
+        ('6', '已交易'),
+        # 可以根据需要添加更多状态
+    ]
     AchievementID = models.AutoField(primary_key=True, verbose_name="成果ID")
     UserID = models.ForeignKey(SiteUser, on_delete=models.CASCADE, verbose_name="用户ID")
     Title = models.CharField(max_length=200, verbose_name="标题")
@@ -22,6 +31,8 @@ class ResearchResult(models.Model):
     Keywords = models.CharField(max_length=200, verbose_name="关键词")
     AchievementType = models.CharField(max_length=200, choices=ACHIEVEMENT_TYPE_CHOICES, default='1',
                                        verbose_name="成果类型")
+    ResearchStatus = models.CharField(max_length=200, choices=STATUS_CHOICES, default='1', verbose_name="成果状态")
+
     # 定价
     Price = models.FloatField(default=0, verbose_name="定价")
     UploadTime = models.DateTimeField(auto_now_add=True, verbose_name="上传时间")

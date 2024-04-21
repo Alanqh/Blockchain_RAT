@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect , get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+
+from decorator import login_required
 from .models import ResearchResult
 from records.models import ModificationRecords
 from .forms import ResearchResultForm, ResearchFileForm
@@ -7,6 +9,8 @@ from .models import ResearchFile
 
 from login.models import SiteUser
 
+
+@login_required
 def create_research_result(request):
     if request.method == 'POST':
         form = ResearchResultForm(request.POST)
@@ -21,8 +25,9 @@ def create_research_result(request):
             research_result.save()
             for f in request.FILES.getlist('file'):
                 ResearchFile.objects.create(file=f, research_result=research_result)
-            ModificationRecords.objects.create(AchievementID=research_result, ResearchStatus='1' ,
-                                               StatusDescription='首次提交科研成果信息，尚未审核')
+            # 创建一条新的记录
+            ModificationRecords.objects.create(AchievementID=research_result,
+                                               StatusDescription=f"{user.name}首次提交科研成果信息，尚未审核")
             return redirect(reverse('research_result_detail', args=[research_result.pk]))
     else:
         form = ResearchResultForm()

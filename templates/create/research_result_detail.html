@@ -21,6 +21,7 @@
     <p>摘要：{{ research_result.Abstract }}</p>
     <p>关键词：{{ research_result.Keywords }}</p>
     <p>成果类型：{{ research_result.get_AchievementType_display }}</p>
+    <p>成果状态：{{ research_result.get_ResearchStatus_display }}</p>
     <p>上传时间：{{ research_result.UploadTime }}</p>
     <p>被查看次数：{{ research_result.ReadingCount }}</p>
     <p>被引用次数：{{ research_result.CitingCount }}</p>
@@ -29,12 +30,10 @@
     {% for file in research_result.files.all %}
         <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.filename }}</a></p>
     {% endfor %}
-    <!-- 返回修改 -->
-    <a href="#">返回修改</a>
 
     <!-- 如果状态是未审核或者已修改，则显示提交审核 -->
-    {% if research_result.Status == '未审核' or research_result.Status == '已修改' %}
-        <a href="{% url '#' %}">提交审核</a>
+    {% if research_result.ResaerchStatus == '1' or '2'%}
+        <a href="#">提交审核</a>
     {% endif %}
 </body>
 </html>

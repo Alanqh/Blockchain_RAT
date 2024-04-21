@@ -3,15 +3,22 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.shortcuts import render, redirect
 
-# Create your views here.
+from create.models import ResearchResult
 from login.forms import LoginForm, RegisterForm
 from login.models import SiteUser, ConfirmString
 from login.utils import hash_code, make_confirm_string, send_email
 
+from django.core.paginator import Paginator
+
 
 def index(request):
-    pass
-    return render(request, 'login/index.html')
+    research_results_list = ResearchResult.objects.filter(ResearchStatus__in=['4', '5', '6'])
+    paginator = Paginator(research_results_list, 9)  # 每页显示 9 个科研成果
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'login/index.html', {'page_obj': page_obj})
 
 
 def login(request):
@@ -34,9 +41,6 @@ def login(request):
             return render(request, 'login/login.html', locals())
     login_form = LoginForm()
     return render(request, 'login/login.html', locals())
-
-
-
 
 
 def register(request):
@@ -94,6 +98,7 @@ def register(request):
 
 from django.conf import settings
 
+
 def user_confirm(request):
     code = request.GET.get('code', None)
     message = ''
@@ -116,10 +121,8 @@ def user_confirm(request):
     return render(request, 'login/confirm.html', locals())
 
 
-
 def logout(request):
     # 如果状态不是登录状态，则无法登出。
     if request.session.get('is_login'):
         request.session.flush()  # 清空session信息
-    return  redirect('/login/')
-
+    return redirect('/login/')
