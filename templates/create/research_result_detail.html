@@ -27,12 +27,12 @@
     <!-- 科研成果附件文件夹 -->
     <h2>附件：</h2>
     {% for file in research_result.files.all %}
-        <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.file.name }}</a></p>
+        <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.filename }}</a></p>
     {% endfor %}
     <!-- 返回修改 -->
     <a href="#">返回修改</a>
-    
-    <!-- 如果状态是未审核或者已修改，则显示提交审核 -->   
+
+    <!-- 如果状态是未审核或者已修改，则显示提交审核 -->
     {% if research_result.Status == '未审核' or research_result.Status == '已修改' %}
         <a href="{% url '#' %}">提交审核</a>
     {% endif %}

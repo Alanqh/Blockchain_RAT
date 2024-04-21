@@ -19,7 +19,8 @@ def create_research_result(request):
             research_result.Author = user.name
             research_result.Ownership = research_result.Author
             research_result.save()
-            ResearchFile.objects.create(file=request.FILES['file'], research_result=research_result)
+            for f in request.FILES.getlist('file'):
+                ResearchFile.objects.create(file=f, research_result=research_result)
             ModificationRecords.objects.create(AchievementID=research_result, ResearchStatus='1' ,
                                                StatusDescription='首次提交科研成果信息，尚未审核')
             return redirect(reverse('research_result_detail', args=[research_result.pk]))
@@ -27,6 +28,8 @@ def create_research_result(request):
         form = ResearchResultForm()
         file_form = ResearchFileForm()
     return render(request, 'create/create_research_result.html', {'form': form, 'file_form': file_form})
+
+
 def research_result_detail(request, pk):
     research_result = get_object_or_404(ResearchResult, pk=pk)
     return render(request, 'create/research_result_detail.html', {'research_result': research_result})

@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 
 from login.models import SiteUser
@@ -45,6 +47,9 @@ class ResearchFile(models.Model):
 
     def __str__(self):
         return self.file.name
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
     class Meta:
         verbose_name = "科研成果附件"
