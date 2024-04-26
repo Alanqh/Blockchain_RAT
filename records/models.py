@@ -41,7 +41,7 @@ class ReviewRecords(models.Model):
 class TransactionRecords(models.Model):
     TRANSACTION_STATUS_CHOICES = [
         ('1', '待处理'),
-        ('2', '已完成'),
+        ('2', '成功'),
         ('3', '失败'),
         # 可以根据需要添加更多状态
     ]

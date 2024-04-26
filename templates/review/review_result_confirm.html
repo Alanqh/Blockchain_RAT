@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>审核结果确认</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light w-25 mx-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-link" href="/review/">待申请</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/review/review_deal/">待审核</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">已审核</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+            {% if form.errors %}
+                <div class="alert alert-warning" role="alert">
+                    <strong>提交失败!</strong> 请检查你的输入
+                    <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>{{ form.review_result.label }}</label>
+                    {{ form.review_result }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.review_comments.label }}</label>
+                    {{ form.review_comments }}
+                </div>
+                <button type="submit" class="btn btn-primary float-left">提交审核结果</button>
+            </form>
+        </div>
+        <div class="col-sm">
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-LCPyFKQyML7mqtS+4XytolfqyqSlcbB3bvDuH9vX2sdQMxRonb/M3b9EmhCNNNrV"
+        crossorigin="anonymous"></script>
+</body>
+</html>

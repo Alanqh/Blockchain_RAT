@@ -14,10 +14,9 @@
 <body>
 {% include 'navbar.html' %}
     <h1>{{ research_result.Title }}</h1>
-    <p>成果ID：{{ research_result.AchievementID }}</p>
-    <p>用户ID：{{ research_result.UserID }}</p>
     <p>作者：{{ research_result.Author }}</p>
     <p>所有权归属：{{ research_result.Ownership }}</p>
+    <p>价格：{{ research_result.Price }}</p>
     <p>摘要：{{ research_result.Abstract }}</p>
     <p>关键词：{{ research_result.Keywords }}</p>
     <p>成果类型：{{ research_result.get_AchievementType_display }}</p>

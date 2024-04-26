@@ -8,8 +8,17 @@
     <!-- Bootstrap 的 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-
-    <title>提交科研成果</title>
+    <!-- 内部样式表 -->
+        <style>
+        .pagination-container {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            right: 50%;
+            text-align: center;
+        }
+    </style>
+    <title>修改科研成果</title>
 </head>
 <body>
 {% include 'navbar.html' %}
@@ -52,7 +61,7 @@
                     </ul>
                 </div>
             {% endif %}
-            <form action="/create/" method="post" enctype="multipart/form-data">
+            <form action="/create/modify_result/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
                     <label>{{ form.Title.label }}</label>

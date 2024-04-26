@@ -33,8 +33,9 @@ class ResearchResult(models.Model):
                                        verbose_name="成果类型")
     ResearchStatus = models.CharField(max_length=200, choices=STATUS_CHOICES, default='1', verbose_name="成果状态")
 
-    # 定价
-    Price = models.FloatField(default=0, verbose_name="定价")
+    # 定价,2位小数
+
+    Price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="定价")
     UploadTime = models.DateTimeField(auto_now_add=True, verbose_name="上传时间")
     ReadingCount = models.IntegerField(default=0, verbose_name="被查看次数")
     CitingCount = models.IntegerField(default=0, verbose_name="被引用次数")

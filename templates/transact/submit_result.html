@@ -9,33 +9,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-    <title>提交科研成果</title>
+    <title>提交交易申请</title>
 </head>
 <body>
 {% include 'navbar.html' %}
 <br>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light w-25 mx-auto">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="/create/">立即发布</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/create/results_created_list/">我的发布</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<br>
+<h4 class="text-center">提交交易申请</h4>
 <div class="container">
     <div class="row">
-        <div class="col-sm">
-        </div>
-        <div class="col-sm">
-            {% if form.errors or file_form.errors %}
+        <div class="col-md-6 mx-auto">
+            {% if form.errors %}
                 <div class="alert alert-warning" role="alert">
                     <strong>提交失败!</strong> 请检查你的输入
                     <ul>
@@ -44,44 +27,33 @@
                             <li>{{ field.label }}: {{ error }}</li>
                         {% endfor %}
                     {% endfor %}
-                    {% for field in file_form %}
-                        {% for error in field.errors %}
-                            <li>{{ field.label }}: {{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
                     </ul>
                 </div>
             {% endif %}
-            <form action="/create/" method="post" enctype="multipart/form-data">
+            <form action="/transact/submit_result/{{result.AchievementID }}/" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label>{{ form.Title.label }}</label>
-                    <input type="text" class="form-control" name="Title">
+                    <label>{{ form.AchievementID.label }}</label>
+                    <input type="text" class="form-control" name="AchievementID" readonly value="{{result.AchievementID}}">
                 </div>
                 <div class="form-group">
-                    <label>{{ form.Abstract.label }}</label>
-                    <textarea class="form-control" name="Abstract"></textarea>
+                    <label>标题</label>
+                    <input type="text" class="form-control" name="Title" readonly value="{{result.Title}}">
                 </div>
                 <div class="form-group">
-                    <label>{{ form.Keywords.label }}</label>
-                    <input type="text" class="form-control" name="Keywords">
+                    <label>所有权归属</label>
+                    <input type="text" class="form-control" name="Ownership" readonly value="{{result.Ownership}}">
                 </div>
                 <div class="form-group">
-                    <label>{{ form.AchievementType.label }}</label>
-                    {{ form.AchievementType }}
+                    <label>{{ form.InitiatorID.label }}</label>
+                    <input type="text" class="form-control" name="InitiatorID" readonly value="{{user.id}}">
                 </div>
                 <div class="form-group">
-                    <label>{{ form.Price.label }}</label>
-                    <input type="text" class="form-control" name="Price">
-                </div>
-                <div class="form-group">
-                    <label>{{ file_form.file.label }}</label>
-                    <input type="file" class="form-control" name="file" multiple>
+                    <label>{{ form.TransactionAmount.label }}</label>
+                    <input type="text" class="form-control" name="TransactionAmount" >
                 </div>
                 <button type="submit" class="btn btn-primary float-left">提交</button>
             </form>
-        </div>
-        <div class="col-sm">
         </div>
     </div>
 </div>

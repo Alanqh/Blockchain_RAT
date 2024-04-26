@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from create.models import ResearchResult
 from login.models import SiteUser
@@ -10,18 +10,18 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from random import choice
 
+
 # Create your views here.
 def index(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
-    research_results_list = ResearchResult.objects.filter(ResearchStatus__in=['1', '2'],Author = user)
+    research_results_list = ResearchResult.objects.filter(ResearchStatus__in=['1', '2'], Author=user)
     paginator = Paginator(research_results_list, 9)  # 每页显示 9 个科研成果
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'review/review_apply.html', {'page_obj': page_obj})
-
 
 
 def submit_result(request, result_id):
@@ -72,3 +72,41 @@ def review_deal(request):
 
     return render(request, 'review/review_deal.html', {'page_obj': page_obj})
 
+
+from .forms import ReviewForm
+
+
+def review_result_confirm(request, result_id):
+    review_record = get_object_or_404(ReviewRecords, AchievementID=result_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review_result = form.cleaned_data['review_result']
+            review_comments = form.cleaned_data['review_comments']
+            review_record.ReviewResult = review_result
+            review_record.ReviewComments = review_comments
+            review_record.save()
+
+            user_id = request.session.get('user_id')
+            user = SiteUser.objects.get(id=user_id)
+            ModificationRecords.objects.create(AchievementID=review_record.AchievementID,
+                                               StatusDescription=f"{user.name}审核了科研成果，审核结果为：{'通过' if review_result == '1' else '未通过'}")
+
+            # If the review result is '1' (passed), update the research result status to '待交易'
+            if review_result == '1':
+                research_result = review_record.AchievementID
+                research_result.ResearchStatus = '4'  # '4' represents '待交易'
+                research_result.save()
+                ModificationRecords.objects.create(AchievementID=research_result,
+                                                   StatusDescription=f"{user.name}审核通过，科研成果状态更新为待交易")
+            if review_result == '2':
+                research_result = review_record.AchievementID
+                research_result.ResearchStatus = '1' # '1' represents '未审核'
+                research_result.save()
+                ModificationRecords.objects.create(AchievementID=research_result,
+                                                   StatusDescription=f"{user.name}审核未通过，科研成果状态更新为未审核")
+
+            return redirect(reverse('review_deal'))
+    else:
+        form = ReviewForm()
+    return render(request, 'review/review_result_confirm.html', {'form': form})
