@@ -52,8 +52,10 @@ def results_created_list(request):
 
     return render(request, 'create/results_created_list.html', {'page_obj': page_obj})
 
+
 def modify_result(request, result_id):
     result = get_object_or_404(ResearchResult, pk=result_id)
+    original_result = ResearchResult.objects.get(pk=result_id)  # 获取原始的科研成果信息
     if request.method == 'POST':
         form = ResearchResultForm(request.POST, instance=result)
         file_form = ResearchFileForm(request.POST, request.FILES)
@@ -66,8 +68,15 @@ def modify_result(request, result_id):
             user_id = request.session.get('user_id')
             user = SiteUser.objects.get(id=user_id)
             # 创建一条新的记录
+            changes = []
+            for field in ResearchResult._meta.fields:
+                original_value = getattr(original_result, field.name)
+                new_value = getattr(research_result, field.name)
+                if original_value != new_value:
+                    changes.append(f"{field.verbose_name}: {original_value} -> {new_value}")
+            changes_description = "; ".join(changes)
             ModificationRecords.objects.create(AchievementID=research_result,
-                                               StatusDescription=f"{user.name}修改了科研成果信息，尚未审核")
+                                               StatusDescription=f"{user.name}修改了科研成果信息，尚未审核。修改内容：{changes_description}")
             return redirect(reverse('research_result_detail', args=[research_result.pk]))
     else:
         form = ResearchResultForm(instance=result)

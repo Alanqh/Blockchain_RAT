@@ -48,7 +48,6 @@ def submit_result(request, result_id):
         messages.error(request, "请先登录")
         return HttpResponseRedirect(reverse('login'))  # Redirect to the login page
 
-
 def review_deal(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -110,3 +109,19 @@ def review_result_confirm(request, result_id):
     else:
         form = ReviewForm()
     return render(request, 'review/review_result_confirm.html', {'form': form})
+
+
+
+def review_records(request):
+    user_id = request.session.get('user_id')
+    user = SiteUser.objects.get(id=user_id)
+
+    if user.usertype == '1':  # 如果用户是科研工作者
+        user_results = ResearchResult.objects.filter(Author=user)
+        records = ReviewRecords.objects.filter(AchievementID__in=user_results)
+    elif user.usertype == '2':  # 如果用户是审核者
+        records = ReviewRecords.objects.filter(ReviewerID=user)
+    else:
+        records = []
+
+    return render(request, 'review/review_records.html', {'records': records})

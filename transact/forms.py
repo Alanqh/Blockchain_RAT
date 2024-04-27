@@ -6,10 +6,11 @@ from records.models import TransactionRecords
 class TransactForm(forms.ModelForm):
     class Meta:
         model = TransactionRecords
-        fields = ['AchievementID','InitiatorID', 'TransactionAmount']
+        fields = ['TransactionAmount']
         labels = {
             'AchievementID': '成果ID',
-            'InitiatorID': '交易发起者ID',
+            'Seller':'出售方',
+            'Buyer': '购买方',
             'TransactionAmount': '交易金额',
         }
 

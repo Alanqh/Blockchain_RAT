@@ -47,7 +47,8 @@ class TransactionRecords(models.Model):
     ]
     TransactionID = models.AutoField(primary_key=True, verbose_name="交易ID")
     AchievementID = models.ForeignKey(ResearchResult, on_delete=models.CASCADE, verbose_name="成果ID")
-    InitiatorID = models.ForeignKey(SiteUser, on_delete=models.CASCADE, verbose_name="交易发起者ID")
+    Buyer = models.ForeignKey(SiteUser, on_delete=models.CASCADE, related_name='transaction_buyer', verbose_name="购买方")
+    Seller = models.ForeignKey(SiteUser, on_delete=models.CASCADE, related_name='transaction_seller', verbose_name="出售方")
     TransactionTime = models.DateTimeField(auto_now_add=True, verbose_name="交易发起时间")
     TransactionAmount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="交易金额")
     TransactionStatus = models.CharField(max_length=200, choices=TRANSACTION_STATUS_CHOICES, default='1',
