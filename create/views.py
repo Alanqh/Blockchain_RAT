@@ -38,7 +38,11 @@ def create_research_result(request):
 
 def research_result_detail(request, pk):
     research_result = get_object_or_404(ResearchResult, pk=pk)
-    return render(request, 'create/research_result_detail.html', {'research_result': research_result})
+    research_result.ReadingCount += 1
+    research_result.save()
+    keywords = research_result.Keywords.split('，')
+    return render(request, 'create/research_result_detail.html',
+                  {'research_result': research_result, 'keywords': keywords})
 
 
 def results_created_list(request):

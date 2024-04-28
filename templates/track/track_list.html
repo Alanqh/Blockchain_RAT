@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>我跟踪的科研成果</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<br>
+<nav class="navbar navbar-expand-lg navbar-light bg-light w-25 mx-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-link " href="/track/">成果跟踪</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link active" href="/track/track_list/">我的跟踪</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        {% for result in research_results %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ result.Title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted"> by {{ result.Author }}</h6>
+                        <p class="card-text">{{ result.get_AchievementType_display}}</p>
+                        <p class="card-text">{{ result.get_ResearchStatus_display }} {{ result.Price }}￥</p>
+                        <p class="card-text">{{ result.UploadTime }}</p>
+                        <a href="/create/detail/{{ result.AchievementID }}" class="btn btn-primary">查看详情</a>
+                        <a href="/track/track_details/{{ result.AchievementID }}" class="btn btn-info">跟踪详情</a>
+                        <a href="{% url 'stop_tracking' research_id=result.AchievementID %}" class="btn btn-danger">取消跟踪</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-md-12 mb-4">
+                <p>你还没有跟踪任何科研成果。</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

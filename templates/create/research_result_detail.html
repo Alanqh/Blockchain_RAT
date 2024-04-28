@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -13,22 +12,31 @@
 </head>
 <body>
 {% include 'navbar.html' %}
-    <h1>{{ research_result.Title }}</h1>
-    <p>作者：{{ research_result.Author }}</p>
-    <p>所有权归属：{{ research_result.Ownership }}</p>
-    <p>价格：{{ research_result.Price }}</p>
-    <p>摘要：{{ research_result.Abstract }}</p>
-    <p>关键词：{{ research_result.Keywords }}</p>
-    <p>成果类型：{{ research_result.get_AchievementType_display }}</p>
-    <p>成果状态：{{ research_result.get_ResearchStatus_display }}</p>
-    <p>上传时间：{{ research_result.UploadTime }}</p>
-    <p>被查看次数：{{ research_result.ReadingCount }}</p>
-    <p>被引用次数：{{ research_result.CitingCount }}</p>
-    <!-- 科研成果附件文件夹 -->
-    <h2>附件：</h2>
-    {% for file in research_result.files.all %}
-        <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.filename }}</a></p>
-    {% endfor %}
-
+<div class="container mt-5">
+    <div class="card" style="border: 5px solid #d2e2f1;">
+        <div class="card-body">
+            <h3 class="card-title">{{ research_result.Title }}</h3>
+            <p class="card-text">作者：{{ research_result.Author }}</p>
+            <p class="card-text">所有权归属：{{ research_result.Ownership }}</p>
+            <p class="card-text">价格：{{ research_result.Price }}</p>
+            <p class="card-text">摘要：{{ research_result.Abstract }}</p>
+            <p class="card-text">关键词：
+                {% for keyword in keywords %}
+                    <span class="badge {% cycle 'badge-primary' 'badge-secondary' 'badge-success' 'badge-danger' 'badge-warning' 'badge-info' 'badge-light' 'badge-dark' %}">{{ keyword }}</span>
+                {% endfor %}
+            </p>
+            <p class="card-text">成果类型：<span class="badge badge-info">{{ research_result.get_AchievementType_display }}</span></p>
+            <p class="card-text">成果状态：<span class="badge badge-success">{{ research_result.get_ResearchStatus_display }}</span></p>
+            <p class="card-text">上传时间：{{ research_result.UploadTime }}</p>
+            <p class="card-text">被查看次数：{{ research_result.ReadingCount }}</p>
+            <p class="card-text">被引用次数：{{ research_result.CitingCount }}</p>
+            <!-- 科研成果附件文件夹 -->
+            <h2>附件：</h2>
+            {% for file in research_result.files.all %}
+                <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.filename }}</a></p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 </body>
 </html>

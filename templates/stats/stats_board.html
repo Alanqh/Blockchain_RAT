@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>统计面板</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 必须的 meta 标签 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+</head>
+<body>
+{% include 'navbar.html' %}
+<br>
+
+    <canvas id="totalResearchResultsChart"></canvas>
+    <canvas id="dailyResearchOutputChart"></canvas>
+    <canvas id="approvalRateChart"></canvas>
+    <canvas id="researchTypeRatioChart"></canvas>
+    <canvas id="transactionStatsChart"></canvas>
+
+    <script>
+        var totalResearchResultsData = {{ total_research_results_data|safe }};
+        var dailyResearchOutputData = {{ daily_research_output_data|safe }};
+        var approvalRateData = {{ approval_rate_data|safe }};
+        var researchTypeRatioData = {{ research_type_ratio_data|safe }};
+        var transactionStatsData = {{ transaction_stats_data|safe }};
+
+        // Create a chart for each data set
+        new Chart(document.getElementById('totalResearchResultsChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(totalResearchResultsData),
+                datasets: [{
+                    label: 'Total Research Results',
+                    data: Object.values(totalResearchResultsData),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Repeat for the other data sets...
+    </script>
+</body>
+</html>
