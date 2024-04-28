@@ -21,49 +21,50 @@
   </head>
   <body>
     {% include 'navbar.html' %}
-    <br>
-<form class="form-inline my-2 my-lg-0 ml-3">
-    <input class="form-control mr-sm-2" type="search" placeholder="输入查找词" aria-label="搜索">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-</form>
-<br>
-<div class="container">
-    <div class="row justify-content-center">
-        {% for result in page_obj %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ result.Title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted"> by {{ result.Author }}</h6>
-                        <p class="card-text">{{ result.get_AchievementType_display}}</p>
-                        <p class="card-text">{{ result.get_ResearchStatus_display }} {{ result.Price }}￥</p>
-                        <p class="card-text">{{ result.UploadTime }}</p>
-                        <a href="/create/detail/{{ result.AchievementID }}" class="btn btn-primary">查看详情</a>
-                    </div>
-                </div>
-            </div>
-        {% empty %}
-            <div class="col-md-12 mb-4">
-                <p>目前市场中还没有科研成果</p>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-<div class="pagination-container">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-            {% endif %}
-            {% for num in page_obj.paginator.page_range %}
-                <li class="page-item {% if num == page_obj.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-            {% endfor %}
-            {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-</div>
+    <h2 class="text-center mt-5">首页放什么内容嘞？</h2>
+{#    <br>#}
+{#<form class="form-inline my-2 my-lg-0 ml-3">#}
+{#    <input class="form-control mr-sm-2" type="search" placeholder="输入查找词" aria-label="搜索">#}
+{#    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
+{#</form>#}
+{#<br>#}
+{#<div class="container">#}
+{#    <div class="row justify-content-center">#}
+{#        {% for result in page_obj %}#}
+{#            <div class="col-md-4 mb-4">#}
+{#                <div class="card">#}
+{#                    <div class="card-body">#}
+{#                        <h5 class="card-title">{{ result.Title }}</h5>#}
+{#                        <h6 class="card-subtitle mb-2 text-muted"> by {{ result.Author }}</h6>#}
+{#                        <p class="card-text">{{ result.get_AchievementType_display}}</p>#}
+{#                        <p class="card-text">{{ result.get_ResearchStatus_display }} {{ result.Price }}￥</p>#}
+{#                        <p class="card-text">{{ result.UploadTime }}</p>#}
+{#                        <a href="/create/detail/{{ result.AchievementID }}" class="btn btn-primary">查看详情</a>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        {% empty %}#}
+{#            <div class="col-md-12 mb-4">#}
+{#                <p>目前市场中还没有科研成果</p>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#</div>#}
+{#<div class="pagination-container">#}
+{#    <nav aria-label="Page navigation example">#}
+{#        <ul class="pagination">#}
+{#            {% if page_obj.has_previous %}#}
+{#                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>#}
+{#            {% endif %}#}
+{#            {% for num in page_obj.paginator.page_range %}#}
+{#                <li class="page-item {% if num == page_obj.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>#}
+{#            {% endfor %}#}
+{#            {% if page_obj.has_next %}#}
+{#                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>#}
+{#            {% endif %}#}
+{#        </ul>#}
+{#    </nav>#}
+{#</div>#}
 
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
@@ -72,6 +73,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-LCPyFKQyML7mqtS+4XytolfqyqSlcbB3bvDuH9vX2sdQMxRonb/M3b9EmhCNNNrV"
             crossorigin="anonymous"></script>
+
+
 
 
   </body>
