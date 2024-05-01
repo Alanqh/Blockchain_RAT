@@ -1,0 +1,83 @@
+<!-- login/user_profile.html -->
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <!-- 必须的 meta 标签 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>用户个人信息</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            padding-top: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #6daaeb;
+            color: #ffffff;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .card-text {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+{% include 'navbar.html' %}
+<br>
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">{{ user.name }}</h2>
+    </div>
+    <div class="card-body">
+      <p class="card-text">电子邮箱: {{ user.email }}</p>
+      <p class="card-text">用户类型: {{ user.get_usertype_display }}</p>
+      <p class="card-text">所属单位: {{ user.organization }}</p>
+      <p class="card-text">所属部门: {{ user.department }}</p>
+      <p class="card-text">账户余额: {{ user.balance }}</p>
+      <p class="card-text">创建时间: {{ user.create_time }}</p>
+      <p class="card-text">是否邮箱验证: {{ user.has_confirmed }}</p>
+      <a href="#" class="btn btn-primary">编辑个人信息</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

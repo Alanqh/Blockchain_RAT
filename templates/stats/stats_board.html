@@ -2,56 +2,460 @@
 <html>
 <head>
     <title>统计面板</title>
-    <!-- Include Chart.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 必须的 meta 标签 -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&display=swap">
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Bootstrap 的 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <style>
+    .artistic-number {
+        font-family: 'Bungee', sans-serif;
+        font-size: 3rem;
+        color: #4d4b4b;
+    }
+
+    @media (max-width: 768px) {
+        .artistic-number {
+            font-size: 2rem;
+        }
+    }
+</style>
+
 
 </head>
 <body>
 {% include 'navbar.html' %}
 <br>
 
-    <canvas id="totalResearchResultsChart"></canvas>
-    <canvas id="dailyResearchOutputChart"></canvas>
-    <canvas id="approvalRateChart"></canvas>
-    <canvas id="researchTypeRatioChart"></canvas>
-    <canvas id="transactionStatsChart"></canvas>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">用户累计</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number">{{ user_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">科研成果累计</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number">{{ research_result_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">科研成果交易量累计</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number">{{ successful_transactions }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">科研成果交易金额累计</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ total_transaction_amount }}￥</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        var totalResearchResultsData = {{ total_research_results_data|safe }};
-        var dailyResearchOutputData = {{ daily_research_output_data|safe }};
-        var approvalRateData = {{ approval_rate_data|safe }};
-        var researchTypeRatioData = {{ research_type_ratio_data|safe }};
-        var transactionStatsData = {{ transaction_stats_data|safe }};
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center" style="max-width: 300px; max-height: 300px;">
+                <h5 class="card-title">审核通过率</h5>
+                <div class="card-body">
+                    <canvas id="approvalRateChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
 
-        // Create a chart for each data set
-        new Chart(document.getElementById('totalResearchResultsChart'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(totalResearchResultsData),
-                datasets: [{
-                    label: 'Total Research Results',
-                    data: Object.values(totalResearchResultsData),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center">
+                <h5 class="card-title">用户类型统计</h5>
+                <div class="card-body">
+                    <canvas id="userCountByTypeChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-3 border-0 text-center " style ="max-height: 300px;">
+                <h5 class="card-title">最近用户注册趋势</h5>
+                <div class="card-body">
+                    <canvas id="recentUserTrendChart" width="600" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center">
+            <h5 class="card-title">科研成果类型统计</h5>
+            <div class="card-body">
+                <canvas id="researchResultTypeChart" width="300" height="300"></canvas>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card mb-3 border-0 text-center">
+            <h5 class="card-title">最近创建的5项科研成果
+                <button type="button" class="btn btn-light btn-sm  d-inline-block" data-toggle="modal" data-target="#researchResultsModal">查看更多</button>
+            </h5>
+            <!-- Modal -->
+            <div class="modal fade" id="researchResultsModal" tabindex="-1" role="dialog" aria-labelledby="researchResultsModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="researchResultsModalLabel">所有科研成果</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Table for all research results -->
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>作者</th>
+                                <th>成果类型</th>
+                                <th>上传时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in total_research_results %}
+                            <tr>
+                                <td>{{ result.Title }}</td>
+                                <td>{{ result.Author }}</td>
+                                <td>{{ result.get_AchievementType_display }}</td>
+                                <td>{{ result.UploadTime }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+<!-- Table for recent research results -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>标题</th>
+                            <th>作者</th>
+                            <th>成果类型</th>
+                            <th>上传时间</th>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in recent_research_results %}
+                        <tr>
+                                <td>{{ result.Title|truncatechars:15 }}</td>
+                                <td>{{ result.Author }}</td>
+                                <td>{{ result.get_AchievementType_display }}</td>
+                                <td>{{ result.UploadTime }}</td>
+                                <!-- Add more data as needed -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3 border-0 text-center">
+            <h5 class="card-title">最近的5条交易记录
+            <button type="button" class="btn btn-light btn-sm  d-inline-block" data-toggle="modal" data-target="#transactionsModal">查看更多</button>
+            </h5>
+            <!-- Modal -->
+<div class="modal fade" id="transactionsModal" tabindex="-1" role="dialog" aria-labelledby="transactionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="transactionsModalLabel">所有交易记录</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Table for all transactions -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>成果</th>
+                    <th>交易时间</th>
+                    <th>金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in total_successful_transactions %}
+                <tr>
+                    <td>{{ transaction.AchievementID.Title }}</td>
+                    <td>{{ transaction.TransactionTime }}</td>
+                    <td>{{ transaction.TransactionAmount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+            <div class="card-body">
+<!-- Table for recent transactions -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>成果</th>
+                            <th>交易时间</th>
+                            <th>金额</th>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in recent_successful_transactions %}
+                        <tr>
+                            <td>{{ transaction.AchievementID.Title|truncatechars:14 }}</td>
+                            <td>{{ transaction.TransactionTime }}</td>
+                            <td>{{ transaction.TransactionAmount }}</td>
+                                <!-- Add more data as needed -->
+                       
+                        </tr>
+                          {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+            </div>
+        </div>
+            <div class="col-md-6">
+            <div class="card mb-3 border-0 text-center">
+                <h5 class="card-title">系统用户活跃度变化</h5>
+                <div class="card-body">
+                    <canvas id="dailyActivityChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+  
+</div>
+</div>
+
+<script>
+    var ctx = document.getElementById('approvalRateChart').getContext('2d');
+    var approvalRateChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['通过', '未通过'],
+            datasets: [{
+                data: [{{ approval_rate }}, {{ disapproval_rate }}],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    display: false // 隐藏纵轴
                 }
             }
-        });
+        }
+    });
+</script>
 
-        // Repeat for the other data sets...
-    </script>
+<script>
+var ctx = document.getElementById('userCountByTypeChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for item in user_count_by_type %}
+                {% if item.usertype == '1' %} '科研工作者',
+                {% elif item.usertype == '2' %} '审核者',
+                {% elif item.usertype == '3' %} '企业',
+                {% endif %}
+            {% endfor %}],
+
+        datasets: [{
+            label: '用户数量',
+            data: [{% for item in user_count_by_type %}{{ item.count }},{% endfor %}],
+            backgroundColor: [
+                'rgb(142,232,232)',
+                'rgb(237,170,170)',
+                'rgb(230,220,156)',
+            ],
+        }]
+    },
+    options: {
+        
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+<!-- Line chart for recent user registration trend -->
+
+<script>
+var ctx = document.getElementById('recentUserTrendChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [{% for item in recent_user_trend %}'{{ item.date|date:"m-d" }}',{% endfor %}],
+        datasets: [{
+            label: '注册人数',  // 设置数据集的标签
+            data: [{% for item in recent_user_trend %}{{ item.count }},{% endfor %}],
+            fill: false,  // 不填充区域
+            borderColor: 'rgb(112,176,241)',
+            backgroundColor: 'rgb(112,176,241)',
+            tension: 0.3  // 设置线条的弯曲程度
+        }]
+    },
+    options: {
+        legend: {
+            display: true,  // 显示图例
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }]
+        }
+    },
+});
+</script>
+
+<script>
+// 生成标签和数据集
+var labels = [];
+var data = [];
+var backgroundColors = [
+    'rgb(142,232,232)',
+    'rgb(241,191,191)',
+    'rgb(230,220,156)',
+    'rgb(170,226,168)',
+];
+
+{% for item in research_results_by_type %}
+    labels.push('{% if item.AchievementType == '1' %}专利{% elif item.AchievementType == '2' %}论文{% elif item.AchievementType == '3' %}软件{% elif item.AchievementType == '4' %}技术报告{% endif %}');
+    data.push({{ item.count }});
+{% endfor %}
+// 创建Chart.js实例
+var ctx = document.getElementById('researchResultTypeChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: data,
+            backgroundColor: backgroundColors,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            position: 'right',
+        },
+        plugins: {
+            datalabels: {
+                color: '#fff',
+                formatter: (value, ctx) => {
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    return (value * 100 / sum).toFixed(2) + "%";
+                },
+            }
+        }
+    },
+});
+</script>
+
+<script>
+// Prepare data for Chart.js
+var labels = [];
+var data = [];
+{% for item in daily_activity %}
+    labels.push('{{ item.date|date:"m-d"  }}');
+    data.push({{ item.count }});
+{% endfor %}
+
+// Create a Chart.js instance
+var ctx = document.getElementById('dailyActivityChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: '每日活跃度',
+            data: data,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgb(75, 192, 192)',
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                display: true,
+                title: {
+                    display: true,
+                    text: '日期'
+                }
+            },
+            y: {
+                display: true,
+                title: {
+                    display: true,
+                    text: '活跃度'
+                }
+            }
+        }
+    }
+});
+</script>
+
+
+
+
 </body>
 </html>

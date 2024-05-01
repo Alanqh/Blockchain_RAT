@@ -7,7 +7,16 @@
     <!-- Bootstrap 的 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-
+        <!-- 内部样式表 -->
+    <style>
+    .pagination-container {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        right: 50%;
+        text-align: center;
+    }
+    </style>
     <title>我跟踪的科研成果</title>
 </head>
 <body>
@@ -29,19 +38,20 @@
     </div>
 </nav>
 <br>
+<br>
 <div class="container">
     <div class="row justify-content-center">
-        {% for result in research_results %}
+        {% for result in page_obj %}
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ result.Title }}</h5>
+                        <h5 class="card-title">{{ result.Title |truncatechars:15}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted"> by {{ result.Author }}</h6>
                         <p class="card-text">{{ result.get_AchievementType_display}}</p>
                         <p class="card-text">{{ result.get_ResearchStatus_display }} {{ result.Price }}￥</p>
                         <p class="card-text">{{ result.UploadTime }}</p>
                         <a href="/create/detail/{{ result.AchievementID }}" class="btn btn-primary">查看详情</a>
-                        <a href="/track/track_details/{{ result.AchievementID }}" class="btn btn-info">跟踪详情</a>
+                        <a href="/track/track_stats_details/{{ result.AchievementID }}" class="btn btn-info">跟踪详情</a>
                         <a href="{% url 'stop_tracking' research_id=result.AchievementID %}" class="btn btn-danger">取消跟踪</a>
                     </div>
                 </div>
@@ -52,6 +62,21 @@
             </div>
         {% endfor %}
     </div>
+</div>
+<div class="pagination-container">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if num == page_obj.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
 </body>
 </html>

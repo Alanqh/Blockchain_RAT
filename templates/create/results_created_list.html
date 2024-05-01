@@ -38,20 +38,21 @@
     </div>
 </nav>
 <br>
+<br>
 <div class="container">
     <div class="row justify-content-center">
         {% for result in page_obj %}
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ result.Title }}</h5>
+                        <h5 class="card-title">{{ result.Title|truncatechars:15 }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted"> created by {{ result.Author }}</h6>
                         <p class="card-text">{{ result.get_ResearchStatus_display }}</p>
                         <p class="card-text">{{ result.get_AchievementType_display}}{{ result.Price }}￥</p>
                         <p class="card-text">{{ result.UploadTime }}</p>
                         <a href="/create/detail/{{ result.AchievementID }}" class="btn btn-primary">查看详情</a>
-                       {% if research_result.ResearchStatus == '1' or research_result.ResearchStatus == '2' %}
-                            <a href="{% url 'modify_result' research_result.id %}" class="btn btn-secondary">重新编辑</a>
+                       {% if result.ResearchStatus == '1' or result.ResearchStatus == '2' %}
+                            <a href="/create/modify_result/{{ result.AchievementID }} " class="btn btn-secondary">重新编辑</a>
                         {% endif %}                   
                     </div>
                 </div>

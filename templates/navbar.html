@@ -3,7 +3,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item ">
-                <a class="nav-link" href="/"> 首页 </a>
+                <a class="nav-link" href="/stats"> 首页 </a>
             <li class="nav-item ">
                 <a class="nav-link" href="/create/"> 发布管理 </a>
             </li>
@@ -16,26 +16,19 @@
             <li class="nav-item ">
                 <a class="nav-link" href="/track/"> 跟踪管理 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/stats/" > 统计面板</a>
-            </li>
             <li class="nav-item ">
-                <a class="nav-link" href="#"> 联盟链浏览器 </a>
+                <a class="nav-link" href="http://realcool.top:8080/#/"> 联盟链浏览器 </a>
             </li>
         </ul>
 
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="#">消息</a>
-            </li>
-        </ul>
+
         <ul class="navbar-nav">
         {% if request.session.username %}
             <li class="nav-item">
                 <a class="nav-link" href="/login/logout/">登出</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">{{ request.session.username }}</a>
+                <a class="nav-link" href="/login/user_profile/">{{ request.session.username }}</a>
             </li>
         {% else %}
             <li class="nav-item">

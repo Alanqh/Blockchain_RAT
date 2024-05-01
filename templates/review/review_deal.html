@@ -40,7 +40,7 @@
         </ul>
     </div>
 </nav>
-
+<br>
 <br>
     {% if no_permission %}
     <div class="alert alert-danger" role="alert">
@@ -54,7 +54,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ result.Title }}</h5>
+                            <h5 class="card-title">{{ result.Title|truncatechars:15 }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted"> created by {{ result.Author }}</h6>
                             <p class="card-text">{{ result.get_AchievementType_display}}{{ result.Price }}￥</p>
                             <p class="card-text">{{ result.UploadTime }}</p>
@@ -87,7 +87,22 @@
 </div>
 {% endif %}
 
+<script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var contentHeight = document.querySelector('.content').clientHeight;
+            var windowHeight = window.innerHeight;
+            var paginationContainer = document.querySelector('.pagination-container');
 
+            if (contentHeight < windowHeight) {
+                paginationContainer.style.position = 'fixed';
+                paginationContainer.style.bottom = '0';
+                paginationContainer.style.left = '0';
+                paginationContainer.style.right = '0';
+            } else {
+                paginationContainer.style.position = 'static';
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

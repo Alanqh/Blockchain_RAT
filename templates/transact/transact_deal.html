@@ -22,7 +22,7 @@
   <body>
     {% include 'navbar.html' %}
     <br>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light w-25 mx-auto">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light w-50 mx-auto">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -37,10 +37,13 @@
             <li class="nav-item">
                 <a class="nav-link" href="/transact/transact_records/">交易记录</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/transact/bought_results/">我的购买</a>
+            </li>
         </ul>
     </div>
 </nav>
-
+<br>
 <br>
 <div class="container">
     <div class="row justify-content-center">
@@ -59,7 +62,7 @@
             </div>
         {% empty %}
             <div class="col-md-12 mb-4">
-                <p>暂无交易申请！！！</p>
+                <p>您没有待处理的交易申请！</p>
             </div>
         {% endfor %}
     </div>

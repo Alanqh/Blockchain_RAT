@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>跟踪详情</title>
     <!-- Bootstrap CSS -->
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&display=swap">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 <style>
     .timeline {
@@ -57,22 +68,20 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item ">
-                <a class="nav-link " href="/track/">成果跟踪</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link active" href="/track/track_list/">我的跟踪</a>
+                <a class="nav-link active " href="/track/track_stats_details/{{ research.AchievementID }}">{{ research_title }}</a>
             </li>
         </ul>
     </div>
 </nav>
 <br>
-<h5 style="text-align: center;">{{ research_title }}</h5><div class="timeline">
+
+<div class="timeline">
 <br>
 {% for record in modification_records %}
     <div class="timeline-item">
         <span class="timeline-date">{{ record.StatusUpdateTime }}</span>
         <p class="timeline-title" data-toggle="modal" data-target="#modal{{ record.StatusUpdateRecordID }}">
-            {{ record.StatusDescription|truncatechars:50 }}
+            {{ record.StatusDescription|truncatechars:40 }}
         </p>
 
         <!-- Modal -->

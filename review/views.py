@@ -16,7 +16,7 @@ def index(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
     research_results_list = ResearchResult.objects.filter(ResearchStatus__in=['1', '2'], Author=user)
-    paginator = Paginator(research_results_list, 9)  # 每页显示 9 个科研成果
+    paginator = Paginator(research_results_list, 3)  # 每页显示 9 个科研成果
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -61,7 +61,7 @@ def review_deal(request):
     research_results = [record.AchievementID for record in unprocessed_records]
 
     # Create a Paginator object
-    paginator = Paginator(research_results, 9)  # Show 9 research results per page
+    paginator = Paginator(research_results, 3)  # Show 9 research results per page
 
     # Get the page number from the request
     page_number = request.GET.get('page')
@@ -76,7 +76,7 @@ from .forms import ReviewForm
 
 
 def review_result_confirm(request, result_id):
-    review_record = get_object_or_404(ReviewRecords, AchievementID=result_id)
+    review_record = get_object_or_404(ReviewRecords, AchievementID=result_id, ReviewResult='3')
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():

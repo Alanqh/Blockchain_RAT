@@ -15,13 +15,13 @@
 <body>
 {% include 'navbar.html' %}
 <br>
+<br>
 <div class="container">
     <div class="row">
-        <div class="col-sm">
-
-        </div>
-        <div class="col-sm">
-            <h3 style="text-align: center">用户登录</h3>
+        <div class="col-sm"></div>
+        <div class="col-sm col-md-5"> <!-- 使用 col-md-8 来限制表单宽度 -->
+            <h4 style="text-align: center">用户登录</h4>
+        <br>
             {% if login_form.captcha.errors %}
                 <div class="alert alert-warning" role="alert">
                     <strong>登录失败!</strong> 验证码不正确
@@ -47,18 +47,21 @@
                     <label>{{ login_form.captcha.label }}</label><br>
                     {{ login_form.captcha }}
                 </div>
-                <button type="submit" class="btn btn-success float-left">登录</button>
-                <a href="register/" class="text-success">
-                    <ins class= float-right>还没有账号，前往注册</ins>
-                </a>
+                <br>
+                <div class="row align-items-center">
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-success btn-block float-left">登录</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="/login/register/" class="text-success float-left">还没有账号，前往注册</a>
+                    </div>
+                </div>
             </form>
-
         </div>
-        <div class="col-sm">
-
-        </div>
+        <div class="col-sm"></div>
     </div>
 </div>
+
 <!-- JavaScript 文件是可选的。从以下两种建议中选择一个即可！ -->
 
 <!-- 选项 1：jQuery 和 Bootstrap 集成包（集成了 Popper） -->

@@ -18,5 +18,7 @@ class RegisterForm(forms.Form):
     password2 = forms.CharField(label="确认密码", max_length=256, required=True)
     email = forms.EmailField(label="邮箱地址")
     usertype = forms.ChoiceField(choices=SiteUser.Usertype, label="用户类型")
+    organization = forms.CharField(label="所属机构", max_length=128)
+    department = forms.CharField(label="所属部门", max_length=128)
     captcha = CaptchaField(label='验证码')
 

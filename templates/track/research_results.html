@@ -39,13 +39,14 @@
     </div>
 </nav>
 <br>
+        <br>
 <div class="container">
     <div class="row justify-content-center">
         {% for result in page_obj %}
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ result.Title }}</h5>
+                        <h5 class="card-title">{{ result.Title |truncatechars:15}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted"> by {{ result.Author }}</h6>
                         <p class="card-text">{{ result.get_AchievementType_display}}</p>
                         <p class="card-text">{{ result.get_ResearchStatus_display }} {{ result.Price }}￥</p>
@@ -54,7 +55,7 @@
                         {% if result.is_tracked %}
                             <a href="{% url 'stop_tracking' research_id=result.AchievementID %}" class="btn btn-danger">取消跟踪</a>
                         {% else %}
-                            <a href="{% url 'start_tracking' research_id=result.AchievementID %}" class="btn btn-primary">跟踪</a>
+                            <a href="{% url 'start_tracking' research_id=result.AchievementID %}" class="btn btn-success">跟踪</a>
                         {% endif %}
                     </div>
                 </div>

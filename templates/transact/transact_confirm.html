@@ -10,7 +10,7 @@
 <body>
 {% include 'navbar.html' %}
 <br>
-<nav class="navbar navbar-expand-lg navbar-light bg-light w-25 mx-auto">
+<nav class="navbar navbar-expand-lg navbar-light bg-light w-50 mx-auto">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -25,6 +25,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/transact/transact_records/">交易记录</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/transact/bought_results/">我的购买</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -32,9 +35,35 @@
 <br>
 <div class="container">
     <div class="row">
+        <div class="col-sm-6">
+            <!-- 原本的内容 -->
+            <div class="card" style="border: 5px solid #d2e2f1;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ result.Title }}</h5>
+                    <p class="card-text">摘要：{{ result.Abstract }}</p>
+                    <p class="card-text">关键词：{{ result.Keywords }}</p>
+                    <p class="card-text">成果类型：<span class="badge badge-info">{{ result.get_AchievementType_display }}</span></p>
+                    <p class="card-text">价格：{{ result.Price }}</p>
+                    <p class="card-text">成果状态：<span class="badge badge-success">{{ result.get_ResearchStatus_display }}</span></p>
+                    <p class="card-text">上传时间：{{ result.UploadTime }}</p>
+                    <!-- 科研成果附件文件夹 -->
+                    <h5>附件：</h5>
+                    {% for file in result.files.all %}
+                        <p><a href="{% url 'download_file' file_id=file.id %}">{{ file.filename }}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        <br>
+    </div>
+    <div class="row">
         <div class="col-sm">
         </div>
         <div class="col-sm">
+        </div>
+        <div class="col-sm6">
+        <br>
+        <h4>{{ buyer }}的出价是{{ TransactionAmount }}元</h4>
+        <br>
             {% if form.errors %}
                 <div class="alert alert-warning" role="alert">
                     <strong>提交失败!</strong> 请检查你的输入
@@ -50,10 +79,9 @@
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label>{{ form.agree_to_transact.label }}</label>
                     {{ form.agree_to_transact }}
                 </div>
-                <button type="submit" class="btn btn-success float-left">提交交易确认</button>
+                <button type="submit" class="btn btn-success float-left">确认交易</button>
             </form>
         </div>
         <div class="col-sm">

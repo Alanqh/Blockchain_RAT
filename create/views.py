@@ -49,7 +49,7 @@ def results_created_list(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
     research_results_list = ResearchResult.objects.filter(Author=user)
-    paginator = Paginator(research_results_list, 9)  # 每页显示 9 个科研成果
+    paginator = Paginator(research_results_list, 3)  # 每页显示 3 个科研成果
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -86,3 +86,16 @@ def modify_result(request, result_id):
         form = ResearchResultForm(instance=result)
         file_form = ResearchFileForm()
     return render(request, 'create/modify_result.html', {'form': form, 'file_form': file_form, 'result': result})
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
+@require_POST
+def increase_citing_count(request, pk):
+    research_result = get_object_or_404(ResearchResult, pk=pk)
+    research_result.CitingCount += 1
+    research_result.save()
+    # 待复制的内容
+    content_to_copy = f"{research_result.Title} by {research_result.Author} at {research_result.UploadTime.strftime('%Y %m %d %H:%M:%S')}"
+
+    return JsonResponse({'status': 'success', 'content_to_copy': content_to_copy})

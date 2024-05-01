@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>跟踪统计</title>
+    <!-- 必须的 meta 标签 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&display=swap">
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <style>
+    .artistic-number {
+        font-family: 'Bungee', sans-serif;
+        font-size: 3rem;
+        color: #4d4b4b;
+    }
+
+    @media (max-width: 768px) {
+        .artistic-number {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+
+</head>
+<body>
+{% include 'navbar.html' %}
+<br>
+<nav class="navbar navbar-expand-lg navbar-light bg-light w-25 mx-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-link active" href="/track/track_details/{{ result.AchievementID }}">{{ result.Title }}</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">交易次数</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number">{{ transaction_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">跟踪人数</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number">{{ tracking_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">阅读量</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number">{{ read_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
+                <h5 class="card-title">引用量</h5>
+                <div class="card-body">
+                    <p class="card-text artistic-number">{{ citation_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+</body>
+</html>

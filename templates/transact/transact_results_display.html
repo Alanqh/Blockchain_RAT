@@ -22,7 +22,7 @@
   <body>
     {% include 'navbar.html' %}
     <br>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light w-25 mx-auto">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light w-50 mx-auto">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -37,27 +37,31 @@
             <li class="nav-item">
                 <a class="nav-link" href="/transact/transact_records/">交易记录</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/transact/bought_results/">我的购买</a>
+            </li>
         </ul>
     </div>
 </nav>
-
 <br>
-    {% if message %}
-<script>
-alert("{{ message }}");
-</script>
-{% endif %}
+<br>
+{% if no_permission %}
+    <div class="alert alert-danger" role="alert">
+        您没有购买权限，系统只允许企业购买科研成果
+    </div>
+{% else %}
 <div class="container">
     <div class="row justify-content-center">
         {% for result in page_obj %}
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ result.Title }}</h5>
+                        <h5 class="card-title">{{ result.Title|truncatechars:15 }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted"> created by {{ result.Author }}</h6>
                         <p class="card-text">{{ result.get_AchievementType_display}} {{ result.Price }}￥</p>
                         <p class="card-text">{{ result.UploadTime }}</p>
                         <a href="/create/detail/{{ result.AchievementID }}" class="btn btn-primary">查看详情</a>
+
                         <a href="/transact/submit_result/{{result.AchievementID }}" class="btn btn-warning">申请交易</a>                    
                     </div>
                 </div>
@@ -84,7 +88,7 @@ alert("{{ message }}");
         </ul>
     </nav>
 </div>
-
+{% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

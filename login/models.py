@@ -10,6 +10,8 @@ class SiteUser(models.Model):
     password = models.CharField(max_length=256, verbose_name="密码")
     email = models.EmailField(unique=True, verbose_name="电子邮箱")
     usertype = models.CharField(max_length=2, choices=Usertype, default='1', verbose_name="用户类型")
+    organization = models.CharField(max_length=128, verbose_name="所属机构")
+    department = models.CharField(max_length=128, verbose_name="所属部门")
     balance = models.IntegerField(default=100000, verbose_name="账户余额")
     # auto_now_add=True时为添加时的时间，更新对象时不会有变动。
     # auto_now=True无论是你添加还是修改对象，时间为你添加或者修改的时间。

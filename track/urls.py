@@ -8,4 +8,5 @@ urlpatterns = [
     path('stop_tracking/<int:research_id>/', views.stop_tracking, name='stop_tracking'),
     path('track_list/', views.my_tracked_research, name='track_list'),
     path('track_details/<int:research_id>/', views.track_details, name='track_details'),
+    path('track_stats_details/<int:research_id>/', views.track_stats_details, name='track_stats_details'),
 ]

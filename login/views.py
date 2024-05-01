@@ -11,15 +11,6 @@ from login.utils import hash_code, make_confirm_string, send_email
 from django.core.paginator import Paginator
 
 
-def index(request):
-    research_results_list = ResearchResult.objects.filter(ResearchStatus__in=['4', '5', '6'])
-    paginator = Paginator(research_results_list, 9)  # 每页显示 9 个科研成果
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, 'login/index.html', {'page_obj': page_obj})
-
 
 def login(request):
     if request.method == 'POST':
@@ -32,7 +23,7 @@ def login(request):
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
                 request.session['username'] = user.name
-                return redirect('index')
+                return redirect('/stats/')
             else:
                 message = "用户名或者密码错误"
                 return render(request, 'login/login.html', locals())
@@ -60,6 +51,8 @@ def register(request):
             password2 = register_form.cleaned_data.get('password2')
             email = register_form.cleaned_data.get('email')
             usertype = register_form.cleaned_data.get('usertype')
+            organization = register_form.cleaned_data.get('organization')
+            department = register_form.cleaned_data.get('department')
 
             # 接下来判断用户名和邮箱是否已经被注册
             same_name_user = SiteUser.objects.filter(name=username)
@@ -74,7 +67,8 @@ def register(request):
             new_user = None
             try:
                 # 将注册的信息存储到数据库，跳转到登录界面
-                new_user = SiteUser(name=username, password=hash_code(password1), email=email, usertype=usertype)
+                new_user = SiteUser(name=username, password=hash_code(password1), email=email, usertype=usertype,
+                                    organization=organization, department=department)
                 new_user.save()
                 # 生成确认码并发送确认邮件
                 code = make_confirm_string(new_user)
@@ -126,3 +120,15 @@ def logout(request):
     if request.session.get('is_login'):
         request.session.flush()  # 清空session信息
     return redirect('/login/')
+
+
+def user_profile(request):
+    user_id = request.session.get('user_id')
+    if user_id is None:
+        return redirect('login')
+    try:
+        user = SiteUser.objects.get(id=user_id)
+    except SiteUser.DoesNotExist:
+        return redirect('login')
+    return render(request, 'login/user_profile.html', {'user': user})
+#TODO：用户个人信息编辑修改功能未实现
