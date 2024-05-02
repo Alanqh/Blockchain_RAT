@@ -30,7 +30,7 @@
             font-size: 2rem;
         }
     }
-</style>
+    </style>
 
 
 </head>
@@ -44,7 +44,10 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item ">
-                <a class="nav-link active" href="/track/track_details/{{ result.AchievementID }}">{{ result.Title }}</a>
+                <a class="nav-link active" href="/track/track_stats_details/{{ result.AchievementID }}">跟踪总览</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link " href="/track/track_details/{{ result.AchievementID }}">详细记录</a>
             </li>
         </ul>
     </div>
@@ -86,7 +89,132 @@
             </div>
         </div>
     </div>
-    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-3 border-0 text-center " style ="max-height: 500px;">
+                <h5 class="card-title">交易量月变化趋势</h5>
+                <div class="card-body">
+                    <canvas id="transactVolumeMonth" width="600" height="500"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3 border-0 text-center " style ="max-height: 500px;">
+                <h5 class="card-title"> 成交额变化趋势</h5>
+                <div class="card-body">
+                    <canvas id="transactionAmountTrend" width="600" height="500"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3 border-0 text-center " style ="max-height: 500px;">
+                <h5 class="card-title">（取消）跟踪人数日分布</h5>
+                <div class="card-body">
+                    <canvas id="trackUsersTrend" width="600" height="500"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+var ctx = document.getElementById('transactVolumeMonth').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+    labels: [{% for item in monthly_transactions %}'{{ item.month|date:"Y-m" }}',{% endfor %}],        datasets: [{
+            label: '交易量',  // 设置数据集的标签
+            data: [{% for item in monthly_transactions %}{{ item.count }},{% endfor %}],
+            fill: false,  // 不填充区域
+            borderColor: 'rgb(142,232,232)',
+            backgroundColor: 'rgb(142,232,232)',
+            tension: 0.3  // 设置线条的弯曲程度
+        }]
+    },
+    options: {
+        legend: {
+            display: true,  // 显示图例
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }]
+        }
+    },
+});
+</script>
+<script>
+var ctx = document.getElementById('transactionAmountTrend').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [{% for item in transaction_records %}'{{ item.TransactionTime|date:"m-d" }}',{% endfor %}],
+        datasets: [{
+            label: '成交额',  // 设置数据集的标签
+            data: [{% for item in transaction_records %}{{ item.TransactionAmount }},{% endfor %}],
+            fill: false,  // 不填充区域
+            borderColor: 'rgb(241,191,191)',
+            backgroundColor: 'rgb(241,191,191)',
+            tension: 0.3  // 设置线条的弯曲程度
+        }]
+    },
+    options: {
+        legend: {
+            display: true,  // 显示图例
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }]
+        }
+    },
+});
+</script>
+<script>
+    var ctx = document.getElementById('trackUsersTrend').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for item in daily_trackings %}'{{ item.day|date:"m-d" }}',{% endfor %}],
+        datasets: [{
+            label: '跟踪人数',  // 设置数据集的标签
+            data: [{% for item in daily_trackings %}{{ item.count }},{% endfor %}],
+            fill: false,  // 不填充区域
+            borderColor: 'rgb(218,172,234)',
+            backgroundColor: 'rgb(218,173,234)',
+            tension: 0.3  // 设置线条的弯曲程度
+        },
+        {
+            label: '取消跟踪人数',  // 设置数据集的标签
+            data: [{% for item in daily_untrackings %}{{ item.count }},{% endfor %}],
+            fill: false,  // 不填充区域
+            borderColor: 'rgb(174,234,179)',
+            backgroundColor: 'rgb(182,235,186)',
+            tension: 0.3  // 设置线条的弯曲程度
+        }]
+    },
+    options: {
+        legend: {
+            display: true,  // 显示图例
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }]
+        }
+    },
+});
+</script>
+
+
 </body>
 </html>

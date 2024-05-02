@@ -1,3 +1,5 @@
+from django.db.models import Count
+from django.db.models.functions import TruncMonth, TruncDay
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -104,6 +106,21 @@ def track_stats_details(request, research_id):
     # 获取修改记录
     modification_records = ModificationRecords.objects.filter(AchievementID=research_result)
 
+    # Get the monthly transaction count
+    monthly_transactions = TransactionRecords.objects.filter(AchievementID=research_result).annotate(
+    month=TruncMonth('TransactionTime')).values('month').annotate(count=Count('TransactionID'))
+
+    transaction_records = TransactionRecords.objects.filter(AchievementID=research_result).order_by(
+        'TransactionTime').values('TransactionTime', 'TransactionAmount')
+
+    # Get the daily tracking count
+    daily_trackings = TrackedResearch.objects.filter(research_result=research_result, track_status='1').annotate(
+        day=TruncDay('track_time')).values('day').annotate(count=Count('id'))
+
+    # Get the daily untracking count
+    daily_untrackings = TrackedResearch.objects.filter(research_result=research_result, track_status='0').annotate(
+        day=TruncDay('track_time')).values('day').annotate(count=Count('id'))
+
     data = {
         'result': research_result,
         'modification_records': modification_records,
@@ -111,6 +128,11 @@ def track_stats_details(request, research_id):
         'tracking_count': tracking_count,
         'read_count': read_count,
         'citation_count': cite_count,
+
+        'monthly_transactions': list(monthly_transactions),
+        'transaction_records' : list(transaction_records),
+        'daily_trackings': list(daily_trackings),
+        'daily_untrackings': list(daily_untrackings),
     }
 
     return render(request, 'track/track_stats_details.html', data)
