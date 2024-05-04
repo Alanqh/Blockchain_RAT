@@ -65,8 +65,7 @@
                     </ul>
                 </div>
             {% endif %}
-            <form action="/create/modify_result/" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+            <form action="{% url 'modify_result' result.AchievementID %}" method="post" enctype="multipart/form-data">                {% csrf_token %}
                 <div class="form-group">
                     <label>{{ form.Title.label }}</label>
                     <input type="text" class="form-control" name="Title">

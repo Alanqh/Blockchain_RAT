@@ -4,12 +4,12 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 
 from create.models import ResearchResult
+from decorator import login_required
 from login.forms import LoginForm, RegisterForm
 from login.models import SiteUser, ConfirmString
 from login.utils import hash_code, make_confirm_string, send_email
 
 from django.core.paginator import Paginator
-
 
 
 def login(request):
@@ -122,6 +122,7 @@ def logout(request):
     return redirect('/login/')
 
 
+@login_required
 def user_profile(request):
     user_id = request.session.get('user_id')
     if user_id is None:

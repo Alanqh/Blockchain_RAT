@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
 from create.models import ResearchResult
+from decorator import login_required
 from login.models import SiteUser
 from records.models import ModificationRecords, ReviewRecords
 from django.http import HttpResponseRedirect
@@ -12,6 +13,7 @@ from random import choice
 
 
 # Create your views here.
+@login_required
 def index(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -24,6 +26,7 @@ def index(request):
     return render(request, 'review/review_apply.html', {'page_obj': page_obj})
 
 
+@login_required
 def submit_result(request, result_id):
     result = get_object_or_404(ResearchResult, AchievementID=result_id)
     if request.session.get('is_login', None):  # Check if the user is logged in
@@ -48,6 +51,8 @@ def submit_result(request, result_id):
         messages.error(request, "请先登录")
         return HttpResponseRedirect(reverse('login'))  # Redirect to the login page
 
+
+@login_required
 def review_deal(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -75,6 +80,7 @@ def review_deal(request):
 from .forms import ReviewForm
 
 
+@login_required
 def review_result_confirm(request, result_id):
     review_record = get_object_or_404(ReviewRecords, AchievementID=result_id, ReviewResult='3')
     if request.method == 'POST':
@@ -89,7 +95,8 @@ def review_result_confirm(request, result_id):
             user_id = request.session.get('user_id')
             user = SiteUser.objects.get(id=user_id)
             ModificationRecords.objects.create(AchievementID=review_record.AchievementID,
-                                               StatusDescription=f"{user.name}审核了科研成果，审核结果为：{'通过' if review_result == '1' else '未通过'}")
+                                               StatusDescription=
+                                               f"{user.name}审核了科研成果，审核结果为：{'通过' if review_result == '1' else '未通过'}")
 
             # If the review result is '1' (passed), update the research result status to '待交易'
             if review_result == '1':
@@ -100,7 +107,7 @@ def review_result_confirm(request, result_id):
                                                    StatusDescription=f"{user.name}审核通过，科研成果状态更新为待交易")
             if review_result == '2':
                 research_result = review_record.AchievementID
-                research_result.ResearchStatus = '1' # '1' represents '未审核'
+                research_result.ResearchStatus = '1'  # '1' represents '未审核'
                 research_result.save()
                 ModificationRecords.objects.create(AchievementID=research_result,
                                                    StatusDescription=f"{user.name}审核未通过，科研成果状态更新为未审核")
@@ -111,7 +118,7 @@ def review_result_confirm(request, result_id):
     return render(request, 'review/review_result_confirm.html', {'form': form})
 
 
-
+@login_required
 def review_records(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)

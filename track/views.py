@@ -13,6 +13,7 @@ from records.models import ModificationRecords, TransactionRecords
 from django.core.paginator import Paginator
 
 
+@login_required
 def index(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -29,6 +30,7 @@ def index(request):
     return render(request, 'track/research_results.html', {'page_obj': page_obj})
 
 
+@login_required
 def start_tracking(request, research_id):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -47,6 +49,7 @@ def start_tracking(request, research_id):
     return redirect('index')
 
 
+@login_required
 def stop_tracking(request, research_id):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -63,6 +66,7 @@ def stop_tracking(request, research_id):
     return redirect('index')
 
 
+@login_required
 def my_tracked_research(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -81,6 +85,7 @@ def my_tracked_research(request):
     return render(request, 'track/track_list.html', {'page_obj': page_obj})
 
 
+@login_required
 def track_details(request, research_id):
     try:
         research = ResearchResult.objects.get(AchievementID=research_id)
@@ -93,13 +98,14 @@ def track_details(request, research_id):
                    'research_title': research.Title})
 
 
+@login_required
 def track_stats_details(request, research_id):
     # 获取科研成果
     research_result = ResearchResult.objects.get(AchievementID=research_id)
 
     # 获取统计数据
     transaction_count = TransactionRecords.objects.filter(AchievementID=research_result).count()
-    tracking_count = TrackedResearch.objects.filter(research_result_id=research_result,track_status='1').count()
+    tracking_count = TrackedResearch.objects.filter(research_result_id=research_result, track_status='1').count()
     read_count = research_result.ReadingCount
     cite_count = research_result.CitingCount
 
@@ -108,7 +114,7 @@ def track_stats_details(request, research_id):
 
     # Get the monthly transaction count
     monthly_transactions = TransactionRecords.objects.filter(AchievementID=research_result).annotate(
-    month=TruncMonth('TransactionTime')).values('month').annotate(count=Count('TransactionID'))
+        month=TruncMonth('TransactionTime')).values('month').annotate(count=Count('TransactionID'))
 
     transaction_records = TransactionRecords.objects.filter(AchievementID=research_result).order_by(
         'TransactionTime').values('TransactionTime', 'TransactionAmount')
@@ -130,7 +136,7 @@ def track_stats_details(request, research_id):
         'citation_count': cite_count,
 
         'monthly_transactions': list(monthly_transactions),
-        'transaction_records' : list(transaction_records),
+        'transaction_records': list(transaction_records),
         'daily_trackings': list(daily_trackings),
         'daily_untrackings': list(daily_untrackings),
     }

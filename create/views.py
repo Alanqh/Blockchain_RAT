@@ -36,6 +36,7 @@ def create_research_result(request):
     return render(request, 'create/create_research_result.html', {'form': form, 'file_form': file_form})
 
 
+@login_required
 def research_result_detail(request, pk):
     research_result = get_object_or_404(ResearchResult, pk=pk)
     research_result.ReadingCount += 1
@@ -45,6 +46,7 @@ def research_result_detail(request, pk):
                   {'research_result': research_result, 'keywords': keywords})
 
 
+@login_required
 def results_created_list(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -57,6 +59,7 @@ def results_created_list(request):
     return render(request, 'create/results_created_list.html', {'page_obj': page_obj})
 
 
+@login_required
 def modify_result(request, result_id):
     result = get_object_or_404(ResearchResult, pk=result_id)
     original_result = ResearchResult.objects.get(pk=result_id)  # 获取原始的科研成果信息
@@ -67,6 +70,7 @@ def modify_result(request, result_id):
             research_result = form.save(commit=False)
             research_result.ResearchStatus = '2'
             research_result.save()
+            ResearchFile.objects.filter(research_result=research_result).delete()
             for f in request.FILES.getlist('file'):
                 ResearchFile.objects.create(file=f, research_result=research_result)
             user_id = request.session.get('user_id')
@@ -80,15 +84,19 @@ def modify_result(request, result_id):
                     changes.append(f"{field.verbose_name}: {original_value} -> {new_value}")
             changes_description = "; ".join(changes)
             ModificationRecords.objects.create(AchievementID=research_result,
-                                               StatusDescription=f"{user.name}修改了科研成果信息，尚未审核。修改内容：{changes_description}")
+                                               StatusDescription=
+                                               f"{user.name}修改了科研成果信息，尚未审核。修改内容：{changes_description}")
             return redirect(reverse('research_result_detail', args=[research_result.pk]))
     else:
         form = ResearchResultForm(instance=result)
         file_form = ResearchFileForm()
-    return render(request, 'create/modify_result.html', {'form': form, 'file_form': file_form, 'result': result})
+    return render(request, 'create/modify_result.html',
+                  {'form': form, 'file_form': file_form, 'result': result})
+
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+
 
 @require_POST
 def increase_citing_count(request, pk):

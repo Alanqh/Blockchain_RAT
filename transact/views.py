@@ -7,11 +7,12 @@ from django.http import FileResponse, HttpResponseForbidden, HttpResponseRedirec
 from django.urls import reverse
 
 from create.models import ResearchFile, ResearchResult
+from decorator import login_required
 from login.models import SiteUser
 from records.models import ModificationRecords, ReviewRecords, TransactionRecords
 from transact.forms import TransactForm
 
-
+@login_required
 def download_file(request, file_id):
     file = ResearchFile.objects.get(id=file_id)
     user_id = request.session.get('user_id')
@@ -28,7 +29,7 @@ def download_file(request, file_id):
     else:
         return render(request, 'transact/error.html', {'message': '你没有权限下载这个文件。请购买后再试。'})
 
-
+@login_required
 def index(request):
     research_results_list = ResearchResult.objects.filter(ResearchStatus__in=['4'])
     paginator = Paginator(research_results_list, 3)  # 每页显示 9 个科研成果
@@ -37,7 +38,7 @@ def index(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'transact/transact_results_display.html', {'page_obj': page_obj})
 
-
+@login_required
 def submit_result(request, result_id):
     result = get_object_or_404(ResearchResult, AchievementID=result_id)
     user_id = request.session.get('user_id')
@@ -70,7 +71,7 @@ def submit_result(request, result_id):
                 return redirect(reverse('transact_results_display'))  # Redirect back to the index page
         return render(request, 'transact/submit_result.html', {'form': form, 'result': result, 'user': buyer})
 
-
+@login_required
 def transact_deal(request):
     user_id = request.session.get('user_id')  # 获取当前登录用户的 ID
     user = SiteUser.objects.get(id=user_id)  # 获取当前登录用户的信息
@@ -86,7 +87,7 @@ def transact_deal(request):
 
 from .forms import ConfirmTransactionForm
 
-
+@login_required
 def transact_confirm(request, result_id):
     result = get_object_or_404(ResearchResult, AchievementID=result_id)
     transaction_record = TransactionRecords.objects.get(AchievementID=result_id, TransactionStatus='1')
@@ -131,7 +132,7 @@ def transact_confirm(request, result_id):
                                                               'buyer': transaction_record.Buyer,
                                                               'TransactionAmount': transaction_record.TransactionAmount})
 
-
+@login_required
 def transact_records(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
@@ -145,12 +146,12 @@ def transact_records(request):
 
     return render(request, 'transact/transact_records.html', {'records': records})
 
-
+@login_required
 def bought_results(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
     records = TransactionRecords.objects.filter(Buyer=user, TransactionStatus='2')
-    research_results = [record.AchievementID for record in records]
+    research_results = [record.AchievementID for record in records if record.AchievementID.Ownership == user.name]
 
     paginator = Paginator(research_results, 3)  # 每页显示 9 个科研成果
 
@@ -162,7 +163,7 @@ def bought_results(request):
 
 from .forms import SecondTransactForm
 
-
+@login_required
 def second_transact(request, result_id):
     result = get_object_or_404(ResearchResult, AchievementID=result_id)
     user_id = request.session.get('user_id')

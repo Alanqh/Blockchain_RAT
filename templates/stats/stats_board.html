@@ -67,7 +67,9 @@
             <div class="card mb-3 border-0 text-center"> <!-- 添加 text-center 类 -->
                 <h5 class="card-title">科研成果交易金额累计</h5>
                 <div class="card-body">
-                    <p class="card-text artistic-number" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ total_transaction_amount }}￥</p>
+                    <p class="card-text artistic-number" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        ￥{{ total_transaction_amount }}
+                    </p>                
                 </div>
             </div>
         </div>
@@ -318,7 +320,11 @@ var chart = new Chart(ctx, {
         
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: true,  // 纵轴从0开始
+                ticks: {
+                    precision: 0,
+                    stepSize: 1 // 设置刻度间隔
+                }
             }
         }
     }
@@ -347,12 +353,25 @@ var chart = new Chart(ctx, {
             display: true,  // 显示图例
         },
         scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    precision: 0
+            x: {
+                display: true,  // 显示横轴
+                title: {
+                    display: true,
+                    text: '日期'
                 }
-            }]
+            },
+            y: {
+                beginAtZero: true,  // 纵轴从0开始
+                ticks: {
+                    precision: 0,
+                    stepSize: 1 // 设置刻度间隔
+                },
+                title: {
+                    display: true,
+                    text: '人数'
+                }
+            }
+            
         }
     },
 });

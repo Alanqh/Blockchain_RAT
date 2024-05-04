@@ -51,7 +51,7 @@
                         <p class="card-text">{{ result.get_AchievementType_display}}</p>
                         <p class="card-text">{{ result.get_ResearchStatus_display }} {{ result.Price }}￥</p>
                         <p class="card-text">{{ result.UploadTime }}</p>
-                        <a href="/create/detail/{{ result.AchievementID }}" class="btn btn-primary">查看详情</a>
+                        <a href="/create/detail/{{ result.AchievementID }}/" class="btn btn-primary">查看详情</a>
                         {% if result.is_tracked %}
                             <a href="{% url 'stop_tracking' research_id=result.AchievementID %}" class="btn btn-danger">取消跟踪</a>
                         {% else %}

@@ -44,10 +44,10 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item ">
-                <a class="nav-link active" href="/track/track_stats_details/{{ result.AchievementID }}">跟踪总览</a>
+                <a class="nav-link active" href="/track/track_stats_details/{{ result.AchievementID }}/">跟踪总览</a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link " href="/track/track_details/{{ result.AchievementID }}">详细记录</a>
+                <a class="nav-link " href="/track/track_details/{{ result.AchievementID }}/">详细记录</a>
             </li>
         </ul>
     </div>
@@ -136,12 +136,23 @@ var chart = new Chart(ctx, {
             display: true,  // 显示图例
         },
         scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    precision: 0
+            x: {
+                title: {
+                    display: true,
+                    text: '月份'
                 }
-            }]
+            },
+            y: {
+                beginAtZero: true,  // 纵轴从0开始
+                ticks: {
+                    precision: 0,
+                    stepSize: 1 // 设置刻度间隔
+                },
+                title: {
+                    display: true,
+                    text: '交易次数'
+                }
+            }
         }
     },
 });
@@ -156,8 +167,8 @@ var chart = new Chart(ctx, {
             label: '成交额',  // 设置数据集的标签
             data: [{% for item in transaction_records %}{{ item.TransactionAmount }},{% endfor %}],
             fill: false,  // 不填充区域
-            borderColor: 'rgb(241,191,191)',
-            backgroundColor: 'rgb(241,191,191)',
+            borderColor: 'rgb(146,191,239)',
+            backgroundColor: 'rgb(146,191,239)',
             tension: 0.3  // 设置线条的弯曲程度
         }]
     },
@@ -166,10 +177,20 @@ var chart = new Chart(ctx, {
             display: true,  // 显示图例
         },
         scales: {
-            yAxes: [{
+            x: {
+                title: {
+                    display: true,
+                    text: '日期'
+                }
+            },
+            y: [{
                 ticks: {
                     beginAtZero: true,
                     precision: 0
+                },
+                title: {
+                    display: true,
+                    text: '成交额'
                 }
             }]
         }
@@ -186,16 +207,16 @@ var chart = new Chart(ctx, {
             label: '跟踪人数',  // 设置数据集的标签
             data: [{% for item in daily_trackings %}{{ item.count }},{% endfor %}],
             fill: false,  // 不填充区域
-            borderColor: 'rgb(218,172,234)',
-            backgroundColor: 'rgb(218,173,234)',
+            borderColor: 'rgb(241,191,191)',
+            backgroundColor: 'rgb(241,191,191)',
             tension: 0.3  // 设置线条的弯曲程度
         },
         {
             label: '取消跟踪人数',  // 设置数据集的标签
             data: [{% for item in daily_untrackings %}{{ item.count }},{% endfor %}],
             fill: false,  // 不填充区域
-            borderColor: 'rgb(174,234,179)',
-            backgroundColor: 'rgb(182,235,186)',
+            borderColor: 'rgb(146,182,221)',
+            backgroundColor: 'rgb(146,182,221)',
             tension: 0.3  // 设置线条的弯曲程度
         }]
     },
@@ -204,15 +225,27 @@ var chart = new Chart(ctx, {
             display: true,  // 显示图例
         },
         scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    precision: 0
+            x: {
+                title: {
+                    display: true,
+                    text: '日期'
                 }
-            }]
+            },
+            y: {
+                beginAtZero: true,  // 纵轴从0开始
+                ticks: {
+                    precision: 0,
+                    stepSize: 1 // 设置刻度间隔
+                },
+                title: {
+                    display: true,
+                    text: '人数'
+            }
         }
-    },
+    }
+    },  
 });
+
 </script>
 
 
