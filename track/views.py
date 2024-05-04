@@ -1,9 +1,10 @@
 from django.db.models import Count
 from django.db.models.functions import TruncMonth, TruncDay
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+
 from django.utils import timezone
 
+from decorator import login_required
 from login.models import SiteUser
 from .models import TrackedResearch
 from create.models import ResearchResult
