@@ -44,6 +44,7 @@ def start_tracking(request, research_id):
     if tracked_research.exists():
         # If the research is already tracked but the status is '0', update it to '1'
         tracked_research.update(track_status='1')
+        tracked_research.update(track_time=timezone.now())
     else:
         TrackedResearch.objects.create(user=user, research_result=research)
     ModificationRecords.objects.create(AchievementID=research, StatusDescription=f'{user}开始跟踪{research}')
@@ -63,6 +64,7 @@ def stop_tracking(request, research_id):
     if tracked_research.exists():
         # If the research is already tracked and the status is '1', update it to '0'
         tracked_research.update(track_status='0')
+        tracked_research.update(track_time=timezone.now())
         ModificationRecords.objects.create(AchievementID=research, StatusDescription=f'{user}停止跟踪{research}')
     return redirect('index')
 

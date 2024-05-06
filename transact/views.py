@@ -21,8 +21,7 @@ def download_file(request, file_id):
     except SiteUser.DoesNotExist:
         return HttpResponseForbidden('You are not logged in.')
 
-    if (
-            user.name == file.research_result.Ownership or user.name == file.research_result.Author) or user.usertype == '2':
+    if (user.name == file.research_result.Ownership or user.name == file.research_result.Author) or user.usertype == '2':
         response = FileResponse(file.file)
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(file.file.name)
         return response
@@ -36,6 +35,9 @@ def index(request):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+
+
     return render(request, 'transact/transact_results_display.html', {'page_obj': page_obj})
 
 @login_required
