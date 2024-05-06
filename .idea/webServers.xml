@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="94fe255d-5c8a-4ef0-b83d-7d5ecbfb7ba9" name="GoogleLQH">
+        <fileTransfer accessType="SFTP" host="34.122.47.92" port="22" sshConfigId="d555c85a-3c05-4a55-9cf4-12d87a8008e2" sshConfig="g20377120lqh@34.122.47.92:22 agent" authAgent="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseSudo="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
