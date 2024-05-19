@@ -20,7 +20,7 @@ def get_stats(request):
     user_count_by_type = SiteUser.objects.values('usertype').annotate(count=Count('id'))
 
     # Get recent user registration trend
-    recent_users = SiteUser.objects.filter(create_time__gte=timezone.now()-timezone.timedelta(days=10))
+    recent_users = SiteUser.objects.filter(create_time__gte=timezone.now()-timezone.timedelta(days=30))
     recent_user_count = recent_users.count()
     recent_user_trend = recent_users.annotate(date=TruncDay('create_time')).values('date').annotate(count=Count('id'))
 
