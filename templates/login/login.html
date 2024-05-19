@@ -1,82 +1,77 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <!-- 必须的 meta 标签 -->
+  <head>
+    <title>登录</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap 的 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../static/dist/css/adminx.css" media="screen" />
+  </head>
+  <body>
 
-    <title>用户登录</title>
-</head>
-<body>
-{% include 'navbar.html' %}
-<br>
-<br>
-<div class="container">
-    <div class="row">
-        <div class="col-sm"></div>
-        <div class="col-sm col-md-5"> <!-- 使用 col-md-8 来限制表单宽度 -->
-            <h4 style="text-align: center">用户登录</h4>
-        <br>
-            {% if login_form.captcha.errors %}
+    <div class="adminx-container d-flex justify-content-center align-items-center">
+      <div class="page-login">
+          <div class="text-center">
+          <a class="navbar-brand mb-4 h1" href="#">
+            <img src="../static/demo/img/logo.png" class="navbar-brand-image d-inline-block align-top mr-2" alt="">
+            科研成果可信转化协同管理系统
+          </a>
+        </div>
+              {% if login_form.captcha.errors %}
                 <div class="alert alert-warning" role="alert">
                     <strong>登录失败!</strong> 验证码不正确
                 </div>
-            {% elif message %}
+              {% elif message %}
                 <div class="alert alert-warning" role="alert">
                     <strong>登录失败!</strong> {{ message }}
                 </div>
-            {% endif %}
-
+              {% endif %}
+        <div class="card mb-0">
+{#          <div class="card-body">#}
+{#          </div>#}
+{#          <div class="card-seperator">#}
+{#            <span>BlockChain</span>#}
+{#          </div>#}
+          
+          <div class="card-body">
             <form action="/login/" method="post">
                 {% csrf_token %}
+              <div class="form-group">
+                <label  class="form-label">用户名</label>
+                <input type="text" class="form-control" id="exampleDropdownFormEmail1" placeholder="Username" name="username">
+              </div>
+              <div class="form-group">
+                <label for="exampleDropdownFormPassword1" class="form-label">密码</label>
+                <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password" name="password">
+              </div>
                 <div class="form-group">
-                    <label>{{ login_form.username.label }}</label>
-                    <input type="text" class="form-control" name="username">
+                    <label for="id_captcha_1" class="form-label">{{ login_form.captcha.label }}</label><br>
+                        {{ login_form.captcha }}
                 </div>
-                <div class="form-group">
-                    <label>{{ login_form.password.label }}</label>
-                    <input type="password" class="form-control" name="password">
-                    <small class="form-text text-muted">密码必须是字母、数字或者特殊符号组成.</small>
-                </div>
-                <div class="form-group">
-                    <label>{{ login_form.captcha.label }}</label><br>
-                    {{ login_form.captcha }}
-                </div>
-                <br>
-                <div class="row align-items-center">
-                    <div class="col-sm-3">
-                        <button type="submit" class="btn btn-success btn-block float-left">登录</button>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-sm btn-block btn-primary">登录</button>
                     </div>
-                    <div class="col-sm-6">
-                        <a href="/login/register/" class="text-success float-left">还没有账号，前往注册</a>
+                    <div class="col-md-7">
+                        <a href="/login/register/" class="align-self-center"><small>还没有账号？立即前往注册</small></a>
                     </div>
                 </div>
             </form>
+          </div>
         </div>
-        <div class="col-sm"></div>
+      </div>
     </div>
-</div>
+    
 
-<!-- JavaScript 文件是可选的。从以下两种建议中选择一个即可！ -->
+    <!-- If you prefer jQuery these are the required scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script src="../static/dist/js/vendor.js"></script>
+    <script src="../static/dist/js/adminx.js"></script>
 
-<!-- 选项 1：jQuery 和 Bootstrap 集成包（集成了 Popper） -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-LCPyFKQyML7mqtS+4XytolfqyqSlcbB3bvDuH9vX2sdQMxRonb/M3b9EmhCNNNrV"
-        crossorigin="anonymous"></script>
-
-<!-- 选项 2：Popper 和 Bootstrap 的 JS 插件各自独立 -->
-<!--
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-gRC4eoaRyQ8xv2X6Mnf+eOIrtON3wId3dAkwO0HQX26OrFBoLpjX/XWOJacSiZhL" crossorigin="anonymous"></script>
--->
-</body>
+    <!-- If you prefer vanilla JS these are the only required scripts -->
+    <!-- script src="../dist/js/vendor.js"></script>
+    <script src="../dist/js/adminx.vanilla.js"></script-->
+  </body>
 </html>
