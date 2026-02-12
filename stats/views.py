@@ -5,6 +5,7 @@ from django.db.models.functions import TruncDay, TruncDate
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.decorators.cache import cache_page
 
 from create.models import ResearchResult
 from login.models import SiteUser
@@ -12,6 +13,7 @@ from records.models import TransactionRecords, ModificationRecords, ReviewRecord
 from track.models import TrackedResearch
 
 
+@cache_page(60)
 def get_stats(request):
     # Get the count of user
     user_count = SiteUser.objects.count()
