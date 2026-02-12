@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -5,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" type="text/css" href="../static/dist/css/adminx.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static 'dist/css/adminx.css' %}" media="screen" />
   </head>
   <body>
 
@@ -13,7 +14,7 @@
       <div class="page-login">
           <div class="text-center">
           <a class="navbar-brand mb-4 h1" href="#">
-            <img src="../static/demo/img/logo.png" class="navbar-brand-image d-inline-block align-top mr-2" alt="">
+            <img src="{% static 'demo/img/logo.png' %}" class="navbar-brand-image d-inline-block align-top mr-2" alt="">
             科研成果可信转化协同管理系统
           </a>
         </div>

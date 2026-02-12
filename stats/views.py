@@ -48,7 +48,7 @@ def get_stats(request):
     total_successful_transactions = TransactionRecords.objects.filter(TransactionStatus='2')
     successful_transactions = TransactionRecords.objects.filter(TransactionStatus='2').count()
     total_transaction_amount = TransactionRecords.objects.filter(TransactionStatus='2').aggregate(
-        total_amount=Sum('TransactionAmount'))['total_amount']
+        total_amount=Sum('TransactionAmount'))['total_amount'] or 0
 
     # 计算日活
     daily_activity = ModificationRecords.objects.filter(
@@ -82,4 +82,3 @@ def get_stats(request):
     }
 
     return render(request, 'stats/stats_board.html', data)
-

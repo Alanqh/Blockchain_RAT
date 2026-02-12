@@ -79,17 +79,26 @@ WSGI_APPLICATION = 'Blockchain_RAT.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blockchain',
-        'USER': 'root',
-        'PASSWORD': 'qwerty123456',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+DB_ENGINE = os.getenv('DJANGO_DB_ENGINE', 'sqlite').lower()
 
-}
+if DB_ENGINE == 'mysql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DJANGO_DB_NAME', 'blockchain'),
+            'USER': os.getenv('DJANGO_DB_USER', 'root'),
+            'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'qwerty123456'),
+            'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),
+            'PORT': os.getenv('DJANGO_DB_PORT', '3306'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / os.getenv('DJANGO_SQLITE_NAME', 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
