@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -5,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" type="text/css" href="../static/dist/css/adminx.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static 'dist/css/adminx.css' %}" media="screen" />
   </head>
   <body>
 
@@ -13,7 +14,7 @@
       <div class="page-login">
           <div class="text-center">
           <a class="navbar-brand mb-4 h1" href="#">
-            <img src="../static/demo/img/logo.png" class="navbar-brand-image d-inline-block align-top mr-2" alt="">
+            <img src="{% static 'demo/img/logo.png' %}" class="navbar-brand-image d-inline-block align-top mr-2" alt="">
             科研成果可信转化协同管理系统
           </a>
         </div>
@@ -64,9 +65,7 @@
     
 
     <!-- If you prefer jQuery these are the required scripts -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="../static/dist/js/vendor.js"></script>
     <script src="../static/dist/js/adminx.js"></script>
 

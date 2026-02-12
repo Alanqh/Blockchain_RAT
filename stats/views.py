@@ -5,6 +5,7 @@ from django.db.models.functions import TruncDay, TruncDate
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.decorators.cache import cache_page
 
 from create.models import ResearchResult
 from login.models import SiteUser
@@ -12,6 +13,7 @@ from records.models import TransactionRecords, ModificationRecords, ReviewRecord
 from track.models import TrackedResearch
 
 
+@cache_page(60)
 def get_stats(request):
     # Get the count of user
     user_count = SiteUser.objects.count()
@@ -46,7 +48,7 @@ def get_stats(request):
     total_successful_transactions = TransactionRecords.objects.filter(TransactionStatus='2')
     successful_transactions = TransactionRecords.objects.filter(TransactionStatus='2').count()
     total_transaction_amount = TransactionRecords.objects.filter(TransactionStatus='2').aggregate(
-        total_amount=Sum('TransactionAmount'))['total_amount']
+        total_amount=Sum('TransactionAmount'))['total_amount'] or 0
 
     # 计算日活
     daily_activity = ModificationRecords.objects.filter(
