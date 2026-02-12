@@ -19,9 +19,12 @@ def index(request):
     user_id = request.session.get('user_id')
     user = SiteUser.objects.get(id=user_id)
     research_results = ResearchResult.objects.filter(ResearchStatus__in=['4', '5', '6'])
+    tracked_ids = set(
+        TrackedResearch.objects.filter(user=user, track_status='1').values_list('research_result_id', flat=True)
+    )
 
     for result in research_results:
-        result.is_tracked = TrackedResearch.objects.filter(user=user, research_result=result, track_status='1').exists()
+        result.is_tracked = result.AchievementID in tracked_ids
     # Create a Paginator object
     paginator = Paginator(research_results, 3)  # Show 10 research_results per page
     # Get the page number from the query string
